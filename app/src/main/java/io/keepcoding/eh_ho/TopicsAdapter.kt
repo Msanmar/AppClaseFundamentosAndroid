@@ -1,20 +1,30 @@
 package io.keepcoding.eh_ho
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ExpandableListView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_topics.view.*
 import kotlinx.android.synthetic.main.item_topic.view.*
 
 //Genérico: abstracción de tipos
 //Genérico de la clase del View Holder que vas a ocupar
-class TopicsAdapter: RecyclerView.Adapter<TopicsAdapter.TopicHolder>(){
+class TopicsAdapter(val topicClickListener: ((Topic)->Unit)?=null): RecyclerView.Adapter<TopicsAdapter.TopicHolder>(){
+
 
 //val topics: MutableList<Topic> = mutableListOf()
 
     private val topics = mutableListOf<Topic>() //colección de datos que queremos mostrar
+    private val listener : ((View) -> Unit) = {
+        val topic = it.tag as Topic
 
+
+        Log.d(TopicsAdapter::class.java.simpleName, topic.toString())
+        topicClickListener?.invoke(topic)
+    }
 
     //Se ejecuta N veces (plantilla)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopicHolder {
@@ -32,6 +42,7 @@ class TopicsAdapter: RecyclerView.Adapter<TopicsAdapter.TopicHolder>(){
         //Recibe el viewHolder
         val topic = topics[position]
         holder.topic = topic
+        holder.itemView.setOnClickListener(listener)
     }
 
 
@@ -50,6 +61,7 @@ class TopicsAdapter: RecyclerView.Adapter<TopicsAdapter.TopicHolder>(){
         //Asignar campos en la vista
         set(value) {
             field = value
+            itemView.tag = field //relacionar vista con tag
             itemView.labelTitle.text = field?.title
         }
 

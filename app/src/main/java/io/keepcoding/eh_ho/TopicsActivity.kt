@@ -2,6 +2,7 @@ package io.keepcoding.eh_ho
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +18,9 @@ class TopicsActivity : AppCompatActivity() {
 
        // findViewById<RecyclerView>(R.id.listTopics).layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
 
-        val adapter = TopicsAdapter()
+        val adapter = TopicsAdapter {
+            Toast.makeText(this,it.title,Toast.LENGTH_LONG).show()
+        }
         adapter.setTopics(TopicsRepo.topics)
 
         //Configurar el layout manager (kotlin extensions)
